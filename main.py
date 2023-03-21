@@ -1,16 +1,42 @@
-# This is a sample Python script.
+from flask import Flask
+from flask_assets import Environment,Bundle
+from livereload import Server
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from com.route.views import views
+
+app = Flask(__name__)
+
+class Main:
+    def __init__(self):
+        self.app = app
+        self.app.config['DEBUG'] = True
+        self.app.config['ASSET_DEBUG'] = True
+        self.setAssets()
+
+    def setAssets(self):
+        assets = Environment(self.app)
+        assets.url = self.app.static_url_path
+        common_css = Bundle(
+            'css/index.scss',
+            filters="pyscss",
+            output="all.css"
+        )
+        common_js = Bundle(
+            'js/index.js',
+            filters="jsmin",
+            output="all.js"
+        )
+        assets.register('all_css',common_css)
+        assets.register('all_js',common_js)
+
+    def get_app(self):
+        return self.app
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+main = Main()
+main.get_app().register_blueprint(views)
 
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+if __name__ == "__main__":
+    # app.run()
+    server = Server(app.wsgi_app)
+    server.serve(port=5000)
