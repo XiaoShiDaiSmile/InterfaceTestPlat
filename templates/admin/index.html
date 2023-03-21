@@ -10,7 +10,129 @@
         <script src="{{ ASSET_URL }}"></script>
     {% endassets %}
 </head>
-<body>
-index
+<body class="layui-all">
+    <div class="layui-admin">
+        <div class="layui-header">
+            <div class="layui-logo">
+                <a href="javascript:;">
+                    <i class="layui-icon layui-icon-home"></i>
+                    <h1>Marify</h1>
+                </a>
+            </div>
+            <div class="layui-header-content">
+                <a href="javascript:;">
+                    <div class="layui-header-tool">
+                        <i class="layui-icon layui-icon-toggle-left" data-side-fold="1"></i>
+                    </div>
+                </a>
+                <ul class="layui-nav layui-header-menu">
+                    <li class="layui-this">
+                        <a href="javascript:;">
+                            <span>系统设置</span>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="layui-nav layui-nav-right">
+                    <li class="layui-nav-item">
+                        <a href="javascript:;" data-refresh="refresh">
+                            <i class="layui-icon layui-icon-refresh"></i>
+                        </a>
+                    </li>
+                    <li class="layui-nav-item">
+                        <a href="javascript:;" data-check-screen="full">
+                            <i class="layui-icon layui-icon-fullscreen-expand"></i>
+                        </a>
+                    </li>
+                    <li class="layui-nav-item">
+                        <a href="javascript:;" data-bgcolor="bgcolor">
+                            <i class="layui-icon layui-icon-edit"></i>
+                        </a>
+                    </li>
+                    <li class="layui-nav-item layui-nav-setting">
+                        <a href="javascript:;">admin <i class="layui-icon layui-icon-arrow-down-bold"></i></a>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="javascript:;">
+                                    <i class="layui-icon layui-icon-user"></i>
+                                    <span>基本信息</span>
+                                </a>
+                            </dd>
+                            <dd>
+                                <a href="javascript:;">
+                                    <i class="layui-icon layui-icon-play"></i>
+                                    <span>修改密码</span>
+                                </a>
+                            </dd>
+                            <dd>
+                                <hr/>
+                            </dd>
+                            <dd>
+                                <a href="javascript:;">
+                                    <i class="layui-icon layui-icon-setting"></i>
+                                    <span>退出系统</span>
+                                </a>
+                            </dd>
+                        </dl>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="layui-side"></div>
+        <div class="layui-body">
+            <div class="layui-tab">
+                <ul class="layui-tab-title">
+                    <li class="layui-this" id="layuitab">
+                        <i class="layui-tab-active"></i>
+                        <span>首页</span>
+                        <i class="layui-tab-close layui-icon layui-icon-close"></i>
+                    </li>
+                </ul>
+                <ul class="layui-tab-control">
+                    <li class="layui-roll-left layui-icon layui-icon-arrow-left-bold"></li>
+                    <li class="layui-roll-right layui-icon layui-icon-arrow-right-bold"></li>
+                    <li class="layui-tab-tool layui-icon layui-icon-arrow-down-bold">
+                        <ul class="layui-nav">
+                            <li class="layui-nav-item">
+                                <a href="javascript:;"></a>
+                                <dl class="layui-nav-child">
+                                    <dd>
+                                        <a href="javascript:;" data-tab-close="refresh">
+                                            <i class="layui-icon layui-icon-setting"></i>
+                                            <span>刷新当前</span>
+                                        </a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;" data-tab-close="current">
+                                            <i class="layui-icon layui-icon-setting"></i>
+                                            <span>关闭当前</span>
+                                        </a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;" data-tab-close="other">
+                                            <i class="layui-icon layui-icon-setting"></i>
+                                            <span>关闭其它</span>
+                                        </a>
+                                    </dd>
+                                    <dd>
+                                        <a href="javascript:;" data-tab-close="all">
+                                            <i class="layui-icon layui-icon-setting"></i>
+                                            <span>关闭全部</span>
+                                        </a>
+                                    </dd>
+                                </dl>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-body">
+                        <div class="layui-tab-item layui-show" id="layuitabcontent">
+                            <iframe src="/sys/menu" frameborder="0" border="0" width="100%" height="100%" maxwidth="0" maxlength="0"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
