@@ -349,6 +349,51 @@ Menu.prototype = {
             scrollLeft:scrollLeft-titleElem.width()/3
         },300)
     },
+    fullScreen:function(){
+        var that = this,
+            o = this.options,
+            el = document.documentElement,
+            rfs = el.requestFullScreen||el.webkitRequestFullScreen;
+        console.log(window)
+        if(rfs&&typeof rfs!==undefined){
+            rfs.call(el);
+        }else if(typeof window.ActiveXObject !== undefined){
+            var wscript = new ActiveXObject("WScript.Shell");
+            if(wscript!==null){
+                wscript.SendKey("${F11}");
+            }
+        }else if(el.msRequestFullScreen){
+            el.msRequestFullScreen();
+        }else if(el.oRequestFullScreen){
+            el.oRequestFullScreen();
+        }else if(el.mRequestFullScreen){
+            el.mRequestFullScreen();
+        }else if(el.webkitRequestFullScreen){
+            el.webkitRequestFullScreen();
+        }
+    },
+    exitFullScreen:function(){
+        var that = this,
+            o = this.options,
+            el = document,
+            rfs = el.cancelFullScreen||el.webkitCancelFullScreen||el.exitFullscreen;
+        if(rfs&&typeof rfs!==undefined){
+            rfs.call(el);
+        }else if(typeof window.ActiveXObject !== undefined){
+            var wscript =new ActiveXObject("WScript.Shell");
+            if(wscript!==null){
+                wscript.SendKey("${F11}");
+            }
+        }else if(el.msExitFullScreen){
+            el.msExitFullScreen();
+        }else if(el.oCancelFullScreen){
+            el.oCancelFullScreen();
+        }else if(el.mCancelFullScreen){
+            el.mCancelFullScreen();
+        }else if(el.webkitCancelFullScreen){
+            el.webkitCancelFullScreen();
+        }
+    },
     listen:function(){
         var that = this,
             o = this.options;
@@ -397,6 +442,21 @@ Menu.prototype = {
             $(".layui-tab-body .layui-tab-item").eq($(this).index()).addClass("layui-show").siblings().removeClass("layui-show");
             that.setPosition();
         });
+        $("body").off("mouseenter",".layui-nav-setting").on("mouseenter",".layui-nav-setting",function(){
+            var child = $(this).find(".layui-nav-child");
+            if(child.css("display")==="block"){
+                clearTimeout(that.timer);
+            }
+            that.timer = setTimeout(function(){
+                child.addClass("layui-show");
+            },300)
+        }).off("mouseleave",".layui-nav-setting").on("mouseleave",".layui-nav-setting",function(){
+            var child = $(this).find(".layui-nav-child");
+            clearTimeout(that.timer);
+            that.timer = setTimeout(function(){
+                child.removeClass("layui-show");
+            },300)
+        });
         $("body").off("mouseenter",".layui-tab-tool").on("mouseenter",".layui-tab-tool",function(){
             var child = $(this).find(".layui-nav-child");
             if(child.css("display")==="block"){
@@ -412,7 +472,7 @@ Menu.prototype = {
                 child.removeClass("layui-show");
             },300)
         });
-        $("body").unbind("mousedown",".layui-tab-title li").bind("contextmenu",".layui-tab-title li",function(e){
+        $(".layui-tab-title li").unbind("mousedown").bind("contextmenu",function(e){
             e.stopPropagation();
             e.preventDefault();
             return false;
@@ -477,10 +537,72 @@ Menu.prototype = {
         $("body").off("click",".layui-roll-left").on("click",".layui-roll-left",function(){
             that.rollClick("left");
         });
-         $("body").off("click",".layui-roll-right").on("click",".layui-roll-right",function(){
+        $("body").off("click",".layui-roll-right").on("click",".layui-roll-right",function(){
             that.rollClick("right");
         });
+        $("body").off("click","[data-refresh]").on("click","[data-refresh]",function(){
+            $(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.location.reload();
+        });
+        $("body").off("click","[data-check-screen]").on("click","[data-check-screen]",function(){
+            $(this).attr("data-check-screen")==="full"?(
+                $(this).attr("data-check-screen","exit").find("i").addClass("layui-icon-fullscreen-shrink").removeClass("layui-icon-fullscreen-expand"),
+                    that.fullScreen()
+            ):(
+                $(this).attr("data-check-screen","full").find("i").addClass("layui-icon-fullscreen-expand").removeClass("layui-icon-fullscreen-shrink"),
+                    that.exitFullScreen()
+            )
+        })
 
+
+    }
+};
+
+//--popjs--
+var pop = {
+    v:'1.0.0',
+    config:{},
+    index:0
+};
+pop.render = function(options){
+    var inst = new Pop(options);
+    layui.call(inst);
+    return inst.index;
+};
+var Pop = function(options){
+    var that = this;
+    that.options = $.extend({},that.config,pop.config,pop.config,options);
+    that.index = ++pop.index;
+    that.id = options&&("id" in options)?options.id:that.index;
+    that.init();
+};
+Pop.prototype = {
+    constructor:pop,
+    config:{
+        type:0,
+        fixed:true,
+        area:"auto",
+        offset:"auto",
+        time:0,
+        isOutAnimate:true,
+        title:'信息',
+        btn:["确定","取消"],
+        closeBtn:true,
+        btnAlign:"right",
+        anim:0,
+        zIndex:100000,
+        ismax:false,
+        move:'.layui-layer-title',
+        moveClose:false,
+        icon:-1
+    },
+    ready:{
+        type:['dialog','page','iframe','loading','tips'],
+        anim:['layui-anim-00','layui-anim-01','layui-anim-02'],
+        end:{}
+    },
+    init:function(){
+        var that = this,
+            o = this.options;
 
     }
 }
