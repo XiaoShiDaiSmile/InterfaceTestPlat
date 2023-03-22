@@ -260,7 +260,94 @@ Menu.prototype = {
             }();
         var li = '<li '+txt+'>'+op.title+'</li>';
         $(".layui-tab-title").append(li);
-        $(".layui-tab-body").append('<div class="layui-nav-item layui-show">'+op.content+'</div>');
+        $(".layui-tab-body").append('<div class="layui-tab-item layui-show">'+op.content+'</div>');
+    },
+    openTabRightMenu:function(href,left){
+        var that = this,
+            o = this.options;
+        that.closeTabRightMenu();
+        var html = '<div class="layui-unselect layui-tab-mousedown layui-show" data-id="'+href+'" style="left:'+left+'px;">'+
+                '<dl>'+
+                    '<dd>'+
+                        '<a href="javascript:;" data-mousedown-close="refresh">'+
+                            '<i class="layui-icon layui-icon-setting"></i>'+
+                            '<span>刷新当前</span>'+
+                        '</a>'+
+                    '</dd>'+
+                    '<dd>'+
+                        '<a href="javascript:;" data-mousedown-close="current">'+
+                            '<i class="layui-icon layui-icon-setting"></i>'+
+                            '<span>关闭当前</span>'+
+                        '</a>'+
+                    '</dd>'+
+                    '<dd>'+
+                        '<a href="javascript:;" data-mousedown-close="other">'+
+                            '<i class="layui-icon layui-icon-setting"></i>'+
+                            '<span>关闭其他</span>'+
+                        '</a>'+
+                    '</dd>'+
+                    '<dd>'+
+                        '<a href="javascript:;" data-mousedown-close="all">'+
+                            '<i class="layui-icon layui-icon-setting"></i>'+
+                            '<span>关闭全部</span>'+
+                        '</a>'+
+                    '</dd>'+
+                '</dl>'+
+            '</div>';
+        $(".layui-tab-title").after(html);
+    },
+    closeTabRightMenu:function(){
+        var that = this,
+            o = this.options;
+        $(".layui-tab-mousedown").remove();
+    },
+    deletetab:function(href){
+        var that = this,
+            o = this.options,
+            othis = $("[lay-id='"+href+"']"),
+            index = othis.index();
+        if(othis.hasClass("layui-this")){
+            if(othis.next()[0]){
+                $(othis.next()[0]).addClass("layui-this").siblings().removeClass("layui-this");
+                $(".layui-tab-item").eq(index+1).addClass("layui-show").siblings().removeClass("layui-show");
+            }else if(othis.prev()[0]){
+                $(othis.prev()[0]).addClass("layui-this").siblings().removeClass("layui-this");
+                $(".layui-tab-item").eq(index-1).addClass("layui-show").siblings().removeClass("layui-show");
+            }
+        }
+        othis.remove();
+        $(".layui-tab-item").eq(othis.index()).remove();
+    },
+    rollClick:function(dire){
+        var that = this,
+            o = this.options,
+            titleElem = $(".layui-tab-title"),
+            scrollLeft = titleElem.scrollLeft();
+        if(dire==="left"){
+            titleElem.animate({
+                scrollLeft:scrollLeft-136
+            },300)
+        }else{
+            titleElem.animate({
+                scrollLeft:scrollLeft+136
+            },300)
+        }
+    },
+    setPosition:function(){
+        var that = this,
+            o = this.options,
+            titleElem = $(".layui-tab-title"),
+            scrollLeft = 0;
+        $(".layui-tab-title li").each((index,item) => {
+            if($(item).hasClass("layui-this")){
+                return false;
+            }else{
+                scrollLeft += $(item).outerWidth();
+            }
+        });
+        titleElem.animate({
+            scrollLeft:scrollLeft-titleElem.width()/3
+        },300)
     },
     listen:function(){
         var that = this,
@@ -307,11 +394,92 @@ Menu.prototype = {
         });
         $("body").off("click",".layui-tab-title li").on("click",".layui-tab-title li",function(){
             $(this).addClass("layui-this").siblings().removeClass("layui-this");
+            $(".layui-tab-body .layui-tab-item").eq($(this).index()).addClass("layui-show").siblings().removeClass("layui-show");
+            that.setPosition();
         });
-        $("body").off("mouseenter",".layui-nav-setting").on("mouseenter",".layui-nav-setting",function(){
+        $("body").off("mouseenter",".layui-tab-tool").on("mouseenter",".layui-tab-tool",function(){
             var child = $(this).find(".layui-nav-child");
-        })
-
+            if(child.css("display")==="block"){
+                clearTimeout(that.timer);
+            }
+            that.timer = setTimeout(function(){
+                child.addClass("layui-show");
+            },300)
+        }).off("mouseleave",".layui-tab-tool").on("mouseleave",".layui-tab-tool",function(){
+            var child = $(this).find(".layui-nav-child");
+            clearTimeout(that.timer);
+            that.timer = setTimeout(function(){
+                child.removeClass("layui-show");
+            },300)
+        });
+        $("body").unbind("mousedown",".layui-tab-title li").bind("contextmenu",".layui-tab-title li",function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            return false;
+        });
+        $("body").off("mousedown",".layui-tab-title li").on("mousedown",".layui-tab-title li",function(e){
+            var left = $(this).offset().left-$(".layui-tab-title").offset().left+($(this).width()/2),
+                href = $(this).attr("lay-id");
+            if(e.which===3){
+                that.openTabRightMenu(href,left);
+            }
+        });
+        $("body").off("click",".layui-header,.layui-side,.layui-tab-title,.layui-body").on("click",".layui-header,.layui-side,.layui-tab-title,.layui-body",function(){
+            that.closeTabRightMenu();
+        });
+        $("body").off("click","[data-mousedown-close]").on("click","[data-mousedown-close]",function(){
+            var closeType = $(this).attr("data-mousedown-close"),
+                currentid = $(this).parents(".layui-tab-mousedown").attr("data-id");
+            if(closeType==="refresh"){
+                $(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.location.reload();
+            }
+            layui.each($(".layui-tab-title li"),(item1,i1) => {
+                var href = $(item1).attr("lay-id"),
+                    id = $(item1).attr("id");
+                if(id!=="layuitab"){
+                    if(closeType==="all"){
+                        that.deletetab(href);
+                    }else{
+                        if(closeType==="current"&&currentid===href){
+                            that.deletetab(href);
+                        }else if(closeType==="other"&&currentid!==href){
+                            that.deletetab(href);
+                        }
+                    }
+                }
+            })
+        });
+        $("body").off("click","[data-tab-close]").on("click","[data-tab-close]",function(){
+            var closeType = $(this).attr("data-tab-close");
+            if(closeType==="refresh"){
+                $(".layui-tab-item.layui-show").find("iframe")[0].contentWindow.location.reload();
+            }
+            layui.each($(".layui-tab-title li"),(item1,i1) => {
+                var href = $(item1).attr("lay-id"),
+                    id = $(item1).attr("id"),
+                    iscurrent = $(item1).hasClass("layui-this");
+                if(id!=="layuitab"){
+                    if(closeType==="all"){
+                        that.deletetab(href);
+                    }else{
+                        if(closeType==="current"&&iscurrent){
+                            that.deletetab(href);
+                        }else if(closeType==="other"&&!iscurrent){
+                            that.deletetab(href);
+                        }
+                    }
+                }
+            })
+        });
+        $("body").off("click",".layui-tab-title .layui-tab-close").on("click",".layui-tab-title .layui-tab-close",function(){
+            that.deletetab($(this).parent().attr("lay-id"));
+        });
+        $("body").off("click",".layui-roll-left").on("click",".layui-roll-left",function(){
+            that.rollClick("left");
+        });
+         $("body").off("click",".layui-roll-right").on("click",".layui-roll-right",function(){
+            that.rollClick("right");
+        });
 
 
     }
