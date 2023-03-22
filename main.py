@@ -12,7 +12,7 @@ class Main:
     def __init__(self):
         self.app = app
         self.app.config['DEBUG'] = True
-        self.app.config['ASSET_DEBUG'] = True
+        self.app.config['ASSET_DEBUG'] = False
         self.app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:2069079840@localhost:3306/manage?charset=utf8"
         self.app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
         self.app.config['SQLALCHEMY_COMMIT_TEARDOWN'] = True

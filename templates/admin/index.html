@@ -6,6 +6,7 @@
     {% assets "all_css" %}
         <link rel="stylesheet" href="{{ ASSET_URL }}">
     {% endassets %}
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/2.2.0/jquery.js"></script>
     {% assets "all_js" %}
         <script src="{{ ASSET_URL }}"></script>
     {% endassets %}
@@ -134,5 +135,104 @@
             </div>
         </div>
     </div>
+    <script>
+        menu.render({
+            side:false,
+            data:[
+                {
+                    id:1,
+                    title:"配置管理系统",
+                    icon:"setting",
+                    href:"/",
+                    target:"",
+                    child:[
+                        {
+                            id:2,
+                            title:"场地活动管理",
+                            icon:"toggle-left",
+                            href:"",
+                            target:"",
+                            child:[
+                                {
+                                    id:3,
+                                    title:"场地信息展示",
+                                    icon:"fullscreen-expand",
+                                    href:"/changdixinxizhans",
+                                    target:""
+                                },
+                                {
+                                    id:4,
+                                    title:"活动预约管理",
+                                    icon:"fullscreen-expand",
+                                    href:"/huodonyuyueguanli",
+                                    target:""
+                                },
+                                {
+                                    id:5,
+                                    title:"活动审核管理",
+                                    icon:"fullscreen-expand",
+                                    href:"/huodonsheheguanli",
+                                    target:""
+                                }
+                            ]
+                        },
+                        {
+                            id:6,
+                            title:"组织管理",
+                            icon:"edit",
+                            href:"/zuzhiguanli",
+                            target:""
+                        }
+                    ]
+                },
+                {
+                    id:21,
+                    title:"数据管理系统",
+                    icon:"user",
+                    href:"/",
+                    target:"",
+                    child:[
+                        {
+                            id:22,
+                            title:"数据操作日志",
+                            icon:"toggle-left",
+                            href:"",
+                            target:"",
+                            child:[
+                                {
+                                    id:23,
+                                    title:"系统操作日志",
+                                    icon:"fullscreen-expand",
+                                    href:"/xitoncaozhuorizhi",
+                                    target:""
+                                },
+                                {
+                                    id:24,
+                                    title:"系统登录日志",
+                                    icon:"fullscreen-expand",
+                                    href:"/huodonyuyueguanli",
+                                    target:""
+                                },
+                                {
+                                    id:25,
+                                    title:"系统错误日志",
+                                    icon:"fullscreen-expand",
+                                    href:"/xitoncuowurizhi",
+                                    target:""
+                                }
+                            ]
+                        },
+                        {
+                            id:26,
+                            title:"项目基础信息管理",
+                            icon:"edit",
+                            href:"/xiangmujichuxinxi",
+                            target:""
+                        }
+                    ]
+                }
+            ]
+        });
+    </script>
 </body>
 </html>

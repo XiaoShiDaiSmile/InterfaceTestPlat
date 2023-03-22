@@ -114,6 +114,9 @@ body{
                     span{
                         color:#565656;
                     }
+                    i{
+                        color:#565656;
+                    }
                 }
             }
             a{
@@ -121,12 +124,20 @@ body{
                 height:60px;
                 padding:0 22px;
                 font-size:0;
+                i{
+                    font-size:17px;
+                    font-weight:bold;
+                    color:rgba(107,107,107,0.7);
+                    display:inline-block;
+                    vertical-align:middle;
+                }
                 span{
                     font-size:14px;
                     font-weight:bold;
                     color:rgba(107,107,107,0.7);
                     display:inline-block;
                     vertical-align:middle;
+                    margin-left:4px;
                 }
             }
         }
@@ -275,6 +286,84 @@ body{
     font-size:0;
     transition:all .3s ease;
     overflow-x:hidden;
+    .layui-nav{
+        width:100%;
+        position:relative;
+        &.layui-show{
+            display:block;
+        }
+        &.layui-hide{
+            display:none;
+        }
+        .layui-nav-item{
+            width:100%;
+            position:relative;
+            font-size:0;
+            a{
+                display:block;
+                height:40px;
+                line-height:40px;
+                padding:0 19px;
+                font-size:0;
+                cursor:pointer;
+                color:rgba(197,187,187,1);
+                white-space:nowrap;
+                position:relative;
+                i:first-child{
+                    width:20px;
+                    font-size:17px;
+                    color:rgba(197,187,187,1);
+                    display:inline-block;
+                    vertical-align:middle;
+                }
+                span{
+                    font-size:14px;
+                    color:rgba(197,187,187,1);
+                    display:inline-block;
+                    vertical-align:middle;
+                    margin-left:7px;
+                }
+                i:last-child{
+                    font-size:14px;
+                    position:absolute;
+                    top:50%;
+                    margin-top:-7px;
+                    right:19px;
+                    color:rgba(197,187,187,1);
+                    line-height:normal;
+                }
+            }
+            .layui-nav-child{
+                padding:2px 0;
+                background:#0c0f13;
+                color:#fff;
+                display:none;
+                a{
+                    padding-left:23px;
+                }
+            }
+        }
+        .layui-this{
+            &>a{
+                background:#1e9fff;
+                color:#fff;
+                i:first-child{
+                    color:#fff;
+                }
+                span{
+                    color:#fff;
+                }
+                i:last-child{
+                    color:#fff;
+                }
+            }
+        }
+        .layui-nav-itemed{
+            &>.layui-nav-child{
+                display:block;
+            }
+        }
+    }
 }
 
 //--bodyscss--
@@ -314,6 +403,11 @@ body{
                 font-size:0;
                 cursor:pointer;
                 border-right:1px solid #f5f5f5;
+                &.layui-this{
+                    .layui-tab-active{
+                        background:#1e9offf;
+                    }
+                }
                 .layui-tab-active{
                     width:9px;
                     height:9px;
@@ -466,5 +560,83 @@ body{
                 }
             }
         }
+        .layui-tab-content{
+            position:relative;
+            font-size:0;
+            width:100%;
+            height:96%;
+            .layui-tab-body{
+                position:relative;
+                width:100%;
+                height:100%;
+                font-size:0;
+                .layui-tab-item{
+                    width:100%;
+                    height:100%;
+                    position:relative;
+                    font-size:0;
+                    display:none;
+                    animation-name:item;
+                    animation-duration:.7s;
+                    animation-fill-mode:both;
+                    &.layui-show{
+                        display:block;
+                    }
+                }
+            }
+        }
+    }
+}
+@keyframes item{
+    0%{
+        transform:translateY(30px);
+        opacity:0.7;
+    }
+    100%{
+        transform:translateY(0);
+        opacity:1;
+    }
+}
+
+//--miniscss--
+.layui-mini{
+    .layui-logo{
+        width:60px;
+        h1{
+            display:none;
+        }
+    }
+    .layui-header-tool{
+        left:99px;
+    }
+    .layui-header-menu{
+        left:157px;
+    }
+    .layui-side{
+        width:60px;
+        .layui-nav{
+            .layui-nav-item{
+                a{
+                    &:hover{
+                        i:first-child{
+                            color:#fff;
+                            transition:all .3s ease;
+                        }
+                    }
+                    i:first-child{
+                        margin-right:70px;
+                    }
+                    i:last-child{
+                        display:none;
+                    }
+                }
+                .layui-nav-child{
+                    display:none;
+                }
+            }
+        }
+    }
+    .layui-body{
+        left:60px;
     }
 }
